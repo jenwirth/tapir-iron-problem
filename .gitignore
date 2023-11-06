@@ -1,0 +1,6 @@
+/.bsp/
+target/
+out/
+.idea/
+.vscode/
+.bloop/
