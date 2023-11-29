@@ -1,8 +1,8 @@
 package toto.util
 
-import _root_.upickle.core.Abort
 import _root_.upickle.default.*
 import io.github.iltotore.iron.{:|, Constraint, RefinedTypeOps, refineEither}
+import toto.util.iron.IronException
 
 /**
  * Implicit `Reader`s and `Writer`s for iron types using uPickle.
@@ -11,6 +11,8 @@ object upickle:
 
   /**
    * A `Reader` for refined types using uPickle. Decodes to the underlying type then checks the constraint.
+   * Throws custom `IronException` in case of failure to be later handled by Codec`
+   * to return `DecodingResult.InvalidValue` instead of `DecodeResult.Error`
    *
    * @param reader the `Reader` of the underlying type.
    * @param constraint the `Constraint` implementation to test the decoded value.
@@ -19,7 +21,7 @@ object upickle:
     reader.map(value =>
       value.refineEither match {
         case Right(refinedValue) => refinedValue
-        case Left(errorMessage) => throw Abort(errorMessage)
+        case Left(errorMessage) => throw IronException(value, errorMessage)
       }
     )
 
