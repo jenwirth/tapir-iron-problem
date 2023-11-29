@@ -1,6 +1,5 @@
 package toto.util
 
-import _root_.upickle.core.Abort
 import _root_.upickle.default.*
 import io.github.iltotore.iron.{:|, Constraint, RefinedTypeOps, refineEither}
 
@@ -19,7 +18,7 @@ object upickle:
     reader.map(value =>
       value.refineEither match {
         case Right(refinedValue) => refinedValue
-        case Left(errorMessage) => throw Abort(errorMessage)
+        case Left(errorMessage) => throw IronException(value, errorMessage)
       }
     )
 
